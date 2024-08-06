@@ -2,6 +2,8 @@ package br.com.projeto.domain;
 
 import java.sql.Date;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,6 +26,7 @@ public class Usuario {
 	private String foto;
 	
 	@Column
+	@CreationTimestamp
 	private Date dataalteracao;
 
 	public Usuario() {
