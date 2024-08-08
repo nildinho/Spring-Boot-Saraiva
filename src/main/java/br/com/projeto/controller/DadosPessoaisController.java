@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,19 +65,60 @@ public class DadosPessoaisController {
 		return "[{msg:'nome atualizado com sucesso'}]";
 	}
 	
-	@PatchMapping("/alteraremail/{email}")
-	public String alteraremail(@PathVariable String email,@RequestBody Dadospessoais dp) {
-		Optional<Dadospessoais> pessoa = dpr.findByEmail(email);
-		
+	@PatchMapping("/alteraremail/{id}")
+	public String alteraremail(@PathVariable Integer id, @RequestBody Dadospessoais dp) {
+		Optional<Dadospessoais> pessoa = dpr.findById(id);
 		if(!pessoa.isPresent()) {
-			return "[{msg:'Não foi possível encontrar a email'}]";
+			return "[{msg:'Não foi possível encontrar a pessoa'}]";
 		}
 		dp.setIddadospessoais(id);
+		dp.setNomecompleto(pessoa.get().getNomecompleto());
 		dp.setCpf(pessoa.get().getCpf());
-		dp.setEmail(pessoa.get().getEmail());
 		dp.setEndereco(pessoa.get().getEndereco());
 		dp.setIdusuario(pessoa.get().getIdusuario());
+		dp.setTelefone(pessoa.get().getTelefone());
 		dpr.save(dp);
-		return "[{msg:'nome atualizado com sucesso'}]";
+		return "[{msg:'Email atualizado com sucesso'}]";
+	}
+	
+	@PatchMapping("/alterarendereco/{id}")
+	public String alterarendereco(@PathVariable Integer id, @RequestBody Dadospessoais dp) {
+		Optional<Dadospessoais> pessoa = dpr.findById(id);
+		if(!pessoa.isPresent()) {
+			return "[{msg:'Não foi possível encontrar a pessoa'}]";
+		}
+		dp.setIddadospessoais(id);
+		dp.setNomecompleto(pessoa.get().getNomecompleto());
+		dp.setCpf(pessoa.get().getCpf());
+		dp.setEmail(pessoa.get().getEmail());
+		dp.setIdusuario(pessoa.get().getIdusuario());
+		dp.setTelefone(pessoa.get().getTelefone());
+		dpr.save(dp);
+		return "[{msg:'Endereço atualizado com sucesso'}]";
+	}
+	@PatchMapping("/alterartelefone/{id}")
+	public String alterartelefone(@PathVariable Integer id, @RequestBody Dadospessoais dp) {
+		Optional<Dadospessoais> pessoa = dpr.findById(id);
+		if(!pessoa.isPresent()) {
+			return "[{msg:'Não foi possível encontrar a pessoa'}]";
+		}
+		dp.setIddadospessoais(id);
+		dp.setNomecompleto(pessoa.get().getNomecompleto());
+		dp.setCpf(pessoa.get().getCpf());
+		dp.setEndereco(pessoa.get().getEndereco());
+		dp.setIdusuario(pessoa.get().getIdusuario());
+		dp.setEmail(pessoa.get().getEmail());
+		dpr.save(dp);
+		return "[{msg:'Telefone atualizado com sucesso'}]";
+	}
+	
+	@DeleteMapping("/apagarpessoa/{id}")
+	public String apagarpessoa(@PathVariable Integer id) {
+		Optional<Dadospessoais> people = dpr.findById(id);
+		if(!people.isPresent()) {
+			return "[{msg:'Não foi possível encontrar a pessoa'}]";
+		}
+		dpr.deleteById(id);
+		return "[{msg:'Pessoa deletada'}]";
 	}
 }
